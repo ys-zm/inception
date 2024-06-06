@@ -1,5 +1,6 @@
 # Overview
 This project is about hosting a WordPress website, with a MariaDB backend, on an Nginx webserver. Each component, the website, MariaDB and Nginx run in an isolated Docker container.
+It is about setting up a small infrastructure composed of different services under specific rules, inside a virtual machine.
 
 # Docker
 ## Images
