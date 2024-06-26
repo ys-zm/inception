@@ -1,0 +1,69 @@
+version: "3"
+
+  # the services part: top-level key under which individual services (containers) are defined
+services:
+#nginx
+  nginx:
+    image: nginx:yzaim
+    container_name: nginx
+    build: ./requirements/nginx # looks for a Dockerfile in this directory
+    ports:
+      - "443:443" # allows external traffic on port 443 to be directed to the nginx service
+    depends_on:
+      - wordpress # ensures that the wordpress service is started before the nginx service
+    volumes:
+      - wordpress:/var/www/wordpress # provides persistent storage, ensuring that data stored in /var/www/wordpress persists even if the container is stopped or removed
+    networks:
+      - network # allows the nginx service to communicate with other services on the same network, like wordpress
+    restart: always # always means that Docker will always restart the container if it stops, regardless of the exit status
+
+#wordpress
+  wordpress:
+    image: wordpress:yzaim
+    container_name: wordpress
+    build: ./requirements/wordpress
+    depends_on:
+      - mariadb
+    volumes:
+      - wordpress:/var/www/wordpress
+    env_file :
+      - .env
+    networks:
+      - network
+    restart: always
+
+#mariadb
+  mariadb:
+    image: mariadb:yzaim
+    container_name: mariadb
+    build: ./requirements/mariadb
+    volumes:
+      - mariadb:/var/lib/mysql
+    env_file :
+      - .env
+    networks :
+      - network
+    restart: always
+
+      # the volumes part: allows you to define named volumes or bind mounts that can be used by services defined in the same Docker Compose file
+volumes:
+  mariadb: # name of the volume.
+    name: mariadb # explicitly names the volume as mariadb
+    driver: local # specifies that this volume is managed locally by Docker 
+    driver_opts: # provides options for the volume driver
+      device: ~/data/mariadb # where the data for the MariaDB service will be stored persistently
+      o : bind # indicates that this is a bind mount, where a specific path on the host (device) is mounted into the container
+      type : none # specifies that no specific volume type is used other than the default behavior of a bind mount
+  wordpress:
+    name: wordpress
+    driver: local
+    driver_opts:
+      device: ~/data/wordpress
+      o : bind
+      type : none
+
+# the networks part
+networks:
+  network:
+    name: network
+    driver: bridge # this is the default so you don't need to define it actually
