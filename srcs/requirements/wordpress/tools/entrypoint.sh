@@ -32,8 +32,8 @@ else
                     --title="wordpress" \
                     --admin_user="$WP_ADMIN" \
                     --admin_password="$WP_ADMIN_PASSWORD" \
-                    --admin_email="casper@cschuijt.nl" \
-                    --url="https://cschuijt.42.fr/" \
+                    --admin_email="yzaim@codam.student.nl" \
+                    --url="https://yzaim.42.fr/" \
                     --skip-email \
                     --allow-root
 

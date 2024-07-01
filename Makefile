@@ -25,11 +25,6 @@ stop:
 build:
 	docker compose -f ./srcs/docker-compose.yml build
 
-# Stops containers and performs comprehensive cleanup of Docker containers, images, volumes, and networks
-clean: stop
-	rm -rf $(DATA)
-	docker system prune --all
-
 # clean the containers
 # stop all running containers and remove them
 # remove all images, volumes and networks
