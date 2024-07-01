@@ -25,7 +25,7 @@ COPY ./tools/entrypoint.sh /etc/entrypoint.sh
 RUN  chmod +x /etc/entrypoint.sh
 
 # define the entrypoint command to run when the container starts
-ENTRYPOINT ["./wp_conf.sh"]
+ENTRYPOINT ["/etc/entrypoint.sh"]
 
 # Don't daemonize `-F`
 CMD ["/usr/sbin/php-fpm7.4", "-F"]
