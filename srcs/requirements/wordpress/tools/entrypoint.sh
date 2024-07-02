@@ -1,5 +1,18 @@
 #!/bin/sh
 
+# Function to wait for the database to be ready
+wait_for_db() {
+    until nc -z -v -w30 mariadb 3306
+    do
+        echo "Waiting for database connection..."
+        sleep 5
+    done
+    echo "Database is up and running!"
+}
+
+# Wait for the database to be ready
+wait_for_db
+
 # Check if wp-config.php exists in the current directory
 if [ -f ./wp-config.php ]; then
     echo "WordPress already downloaded"
@@ -11,6 +24,7 @@ fi
 # Check if wp-config.php exists in the /var/www/html directory
 if [ -f /var/www/html/wp-config.php ]; then
     echo "WordPress is already configured"
+	rm -rf /var/www/html/*
 else
     echo "Creating WordPress config..."
 
@@ -33,7 +47,7 @@ else
                     --admin_user="$WP_ADMIN" \
                     --admin_password="$WP_ADMIN_PASSWORD" \
                     --admin_email="yzaim@codam.student.nl" \
-                    --url="https://yzaim.42.fr/" \
+                    --url="https://yzaim.codam.nl/" \
                     --skip-email \
                     --allow-root
 

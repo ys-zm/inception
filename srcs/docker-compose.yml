@@ -2,27 +2,27 @@ version: "3"
 
 services:
   nginx:
-    image: nginx:yzaim
     container_name: nginx
     build: ./requirements/nginx
     ports:
-      - "443:443"
+      - 443:443
+    env_file:
+      - .env
     depends_on:
       - wordpress
     volumes:
-      - wordpress:/var/www/wordpress
+      - wordpress:/var/www/html
     networks:
       - network
     restart: always
 
   wordpress:
-    image: wordpress:yzaim
     container_name: wordpress
     build: ./requirements/wordpress
     depends_on:
       - mariadb
     volumes:
-      - wordpress:/var/www/wordpress
+      - wordpress:/var/www/html
     env_file:
       - .env
     networks:
@@ -30,7 +30,6 @@ services:
     restart: always
 
   mariadb:
-    image: mariadb:yzaim
     container_name: mariadb
     build: ./requirements/mariadb
     volumes:
@@ -40,6 +39,12 @@ services:
     networks:
       - network
     restart: always
+    healthcheck:
+      test: ["CMD", "/etc/healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 1m
+      timeout: 5s
+      retries: 10
+      start_period: 2s
 
 volumes:
   mariadb:

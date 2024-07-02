@@ -1,7 +1,7 @@
-##!/bin/bash -e
+#!/bin/bash
 
 # Check if the database directory already exists
-if [ -d "/var/lib/mysql/$MYSQL_DB" ]; then
+if [ -d "/var/lib/mysql/$MYSQL_DATABASE" ]; then
     echo "Database already exists, skipping preparation"
 else
     echo "Preparing default user and database"
@@ -12,13 +12,13 @@ else
 
     #--------------mariadb config--------------#
     # Create database if not exists
-    mariadb -e "CREATE DATABASE IF NOT EXISTS \`${MYSQL_DB}\`;"
+    mariadb -e "CREATE DATABASE IF NOT EXISTS \`${MYSQL_DATABASE}\`;"
 
     # Create user if not exists
     mariadb -e "CREATE USER IF NOT EXISTS \`${MYSQL_USER}\`@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';"
 
     # Grant privileges to user
-    mariadb -e "GRANT ALL PRIVILEGES ON ${MYSQL_DB}.* TO \`${MYSQL_USER}\`@'%';"
+    mariadb -e "GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO \`${MYSQL_USER}\`@'%';"
 
     # Flush privileges to apply changes
     mariadb -e "FLUSH PRIVILEGES;"

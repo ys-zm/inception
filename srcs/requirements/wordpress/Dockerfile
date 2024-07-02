@@ -4,10 +4,16 @@ FROM debian:bullseye
 RUN apt update
 
 # install the required packages
-RUN apt install php7.4=7.4.33-1+deb11u5 \
-                php7.4-mysql=7.4.33-1+deb11u5 \
-                php7.4-fpm=7.4.33-1+deb11u5 \
-                curl=7.74.0-1.3+deb11u11
+#RUN apt install php7.4=7.4.33-1+deb11u5 \
+ #               php7.4-mysql=7.4.33-1+deb11u5 \
+  #              php7.4-fpm=7.4.33-1+deb11u5 \
+   #             curl=7.74.0-1.3+deb11u11
+
+RUN apt-get install -y wget curl php php-cgi php-mysql php-fpm php-pdo php-cli php-gd php-mbstring netcat
+#RUN rm -rf /var/lib/apt/lists/*
+
+RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+		&& chmod +x wp-cli.phar && mv wp-cli.phar /usr/local/bin/wp
 
 RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
 		&& chmod +x wp-cli.phar && mv wp-cli.phar /usr/local/bin/wp
