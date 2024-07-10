@@ -21,7 +21,7 @@ services:
     build: ./requirements/wordpress
     depends_on:
       mariadb:
-        condition: healthy
+        condition: service_healthy
         required: true
     volumes:
       - wordpress:/var/www/html
