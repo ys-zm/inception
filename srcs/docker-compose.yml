@@ -20,7 +20,9 @@ services:
     container_name: wordpress
     build: ./requirements/wordpress
     depends_on:
-      - mariadb
+      mariadb:
+        condition: healthy
+        required: true
     volumes:
       - wordpress:/var/www/html
     env_file:
